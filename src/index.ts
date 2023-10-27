@@ -8,13 +8,17 @@ const allowedOrigins = ['/http:\/\/localhost(:\d{1,5})?/'];
 
 export default class Server {
   constructor(app: Application, port: Number) {
-    this.config(app);
+    this.initialize(app, port);
+  }
+
+  private async initialize(app: Application, port: Number) {
+    await this.config(app);
     new Routes(app);
 
     this.startServer(app, port);
   }
 
-  private config(app: Application): void {
+  private async config(app: Application): Promise<void> {
     const corsOptions: CorsOptions = {
       origin: allowedOrigins
     };
@@ -22,8 +26,8 @@ export default class Server {
     app.use(cors(corsOptions));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    
-    Database.connect();
+
+    await Database.connect();
   }
 
   private startServer(app: Application, port: Number) {
