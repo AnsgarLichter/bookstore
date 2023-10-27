@@ -5,9 +5,14 @@ import { Books } from "../models/books.model";
 export default class BooksController {
     async create(request: Request, response: Response) {
         try {
-            response.status(201).json({
-                reqBody: request.body
+            const body = request.body;
+
+            const book = await Books.create({
+                title: body.title,
+                isbn: body.isbn
             });
+
+            response.status(201).json(book);
         } catch (error) {
             response.status(500).json({
                 message: "Internal Server error!"
@@ -17,7 +22,9 @@ export default class BooksController {
 
     async findAll(request: Request, response: Response) {
         try {
-            return Books.find();
+            const books = await Books.find({});
+
+            response.json(books);
         } catch (error) {
             response.status(500).json({
                 message: "Internal Server error!"
@@ -29,8 +36,11 @@ export default class BooksController {
         try {
             const id = request.params.id;
 
-            return Books.findById(id);
+            const book = await Books.findById({ _id: id });
+
+            response.json(book);
         } catch (error) {
+            console.log(error);
             response.status(500).json({
                 message: "Internal Server error!"
             });
@@ -39,11 +49,22 @@ export default class BooksController {
 
     async update(request: Request, response: Response) {
         try {
-            response.status(200).json({
-                reqParamId: request.params.id,
-                reqBody: request.body
-            });
+            const id = request.params.id;
+            const body = request.body;
+
+            const book = await Books.findByIdAndUpdate(
+                id,
+                {
+                    title: body.title,
+                    isbn: body.isbn
+                },
+                {
+                    returnDocument: 'after'
+                });
+
+            response.status(200).json(book);
         } catch (error) {
+            console.log(error);
             response.status(500).json({
                 message: "Internal Server error!"
             });
@@ -52,9 +73,10 @@ export default class BooksController {
 
     async delete(request: Request, response: Response) {
         try {
-            response.status(200).json({
-                reqParamId: request.params.id
-            });
+            const id = request.params.id;
+
+            await Books.deleteOne({ _id: id });
+            response.status(200);
         } catch (error) {
             response.status(500).json({
                 message: "Internal Server error!"
