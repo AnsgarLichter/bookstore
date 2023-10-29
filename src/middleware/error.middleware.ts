@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import HttpError from "../utils/httpError.error"
 
-const ErrorMiddleware = (
+const errorMiddleware = (
     error: HttpError,
     request: Request,
     response: Response,
@@ -16,4 +16,4 @@ const ErrorMiddleware = (
     });
 }
 
-export default ErrorMiddleware;
+export default errorMiddleware;

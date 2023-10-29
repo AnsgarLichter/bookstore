@@ -1,5 +1,7 @@
 import { Router } from "express";
 import AuthorController from "../controllers/author.controller";
+import validationMiddleware from "../middleware/validation.middleware";
+import authorValidation from "../validations/author.validation";
 
 class AuthorRoutes {
   router = Router();
@@ -10,19 +12,10 @@ class AuthorRoutes {
   }
 
   intializeRoutes() {
-    // Create a new Tutorial
-    this.router.post("/", this.controller.create);
-
-    // Retrieve all Tutorials
+    this.router.post("/", validationMiddleware(authorValidation.author), this.controller.create);
     this.router.get("/", this.controller.findAll);
-
-    // Retrieve a single Tutorial with id
     this.router.get("/:id", this.controller.findById);
-
-    // Update a Tutorial with id
-    this.router.put("/:id", this.controller.update);
-
-    // Delete a Tutorial with id
+    this.router.put("/:id", validationMiddleware(authorValidation.author), this.controller.update);
     this.router.delete("/:id", this.controller.delete);
   }
 }
