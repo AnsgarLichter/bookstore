@@ -1,16 +1,15 @@
 import { Request, Response } from "express";
+import BookService from "../services/book.service";
+import { ObjectId } from "mongoose";
 
-import { Books } from "../models/books.model";
+export default class BookController {
+    private service = new BookService();
 
-export default class BooksController {
     async create(request: Request, response: Response) {
         try {
             const body = request.body;
 
-            const book = await Books.create({
-                title: body.title,
-                isbn: body.isbn
-            });
+            const book = await this.service.create(body.title, body.isbn);
 
             response.status(201).json(book);
         } catch (error) {
@@ -22,7 +21,7 @@ export default class BooksController {
 
     async findAll(request: Request, response: Response) {
         try {
-            const books = await Books.find({});
+            const books = await this.service.findAll();
 
             response.json(books);
         } catch (error) {
@@ -36,7 +35,7 @@ export default class BooksController {
         try {
             const id = request.params.id;
 
-            const book = await Books.findById({ _id: id });
+            const book = await this.service.findById(id);
 
             response.json(book);
         } catch (error) {
@@ -52,17 +51,9 @@ export default class BooksController {
             const id = request.params.id;
             const body = request.body;
 
-            const book = await Books.findByIdAndUpdate(
-                id,
-                {
-                    title: body.title,
-                    isbn: body.isbn
-                },
-                {
-                    returnDocument: 'after'
-                });
+            const updatedBook = await this.service.update(id, body.title, body.isbn);
 
-            response.status(200).json(book);
+            response.status(200).json(updatedBook);
         } catch (error) {
             console.log(error);
             response.status(500).json({
@@ -73,9 +64,9 @@ export default class BooksController {
 
     async delete(request: Request, response: Response) {
         try {
-            const id = request.params.id;
+            const id = request.params.id as ObjectId;
 
-            await Books.deleteOne({ _id: id });
+            await this.service.delete(id);
             response.status(200);
         } catch (error) {
             response.status(500).json({

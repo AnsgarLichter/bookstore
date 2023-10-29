@@ -1,9 +1,9 @@
 import { Router } from "express";
-import BooksController from "../controllers/books.controller";
+import BookController from "../controllers/book.controller";
 
-class BooksRoutes {
+class BookRoutes {
   router = Router();
-  controller = new BooksController();
+  controller = new BookController();
 
   constructor() {
     this.intializeRoutes();
@@ -27,4 +27,4 @@ class BooksRoutes {
   }
 }
 
-export default new BooksRoutes().router;
+export default new BookRoutes().router;
