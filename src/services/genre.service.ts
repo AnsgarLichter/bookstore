@@ -1,7 +1,7 @@
 import { ObjectId, Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 import { GenreModel } from "../models/genre.model";
-import Genre from "../models/genre.interface";
+import Genre from "../interfaces/genre.interface";
 
 export default class GenreService {
     private model = GenreModel;

@@ -1,5 +1,5 @@
 import { BookModel } from "../models/book.model";
-import Book from "../models/book.interface";
+import Book from "../interfaces/book.interface";
 import { ObjectId, Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 
