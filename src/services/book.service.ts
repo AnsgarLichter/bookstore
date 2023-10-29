@@ -1,6 +1,6 @@
 import { BookModel } from "../models/book.model";
 import Book from "../models/book.interface";
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 
 export default class BookService {
@@ -31,7 +31,7 @@ export default class BookService {
         }
     }
 
-    public async findById(id: ObjectId): Promise<Book | null> {
+    public async findById(id: Types.ObjectId): Promise<Book | null> {
         try {
             const book = await this.model.findById(id);
 
@@ -42,7 +42,7 @@ export default class BookService {
         }
     }
 
-    public async update(id: ObjectId, title: string, isbn: string): Promise<Book | null> {
+    public async update(id: Types.ObjectId, title: string, isbn: string): Promise<Book | null> {
         try {
             const book = await this.model.findByIdAndUpdate(
                 id,
@@ -61,7 +61,7 @@ export default class BookService {
         }
     }
 
-    public async delete(id: ObjectId): Promise<void> {
+    public async delete(id: Types.ObjectId): Promise<void> {
         try {
             await this.model.deleteOne(id);
         } catch (error) {

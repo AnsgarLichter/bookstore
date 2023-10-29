@@ -1,6 +1,8 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export default interface Book extends Document {
     title: string;
     isbn: string;
+    author: Types.ObjectId;
+    genres: Types.ObjectId[];
 }

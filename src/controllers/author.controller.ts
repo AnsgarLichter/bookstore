@@ -1,39 +1,39 @@
 import { Request, Response } from "express";
-import BookService from "../services/book.service";
+import AuthorService from "../services/author.service";
 import { Types } from "mongoose";
 
-export default class BookController {
-    private service = new BookService();
+export default class AuthorController {
+    private service = new AuthorService();
 
     async create(request: Request, response: Response) {
         const body = request.body;
 
-        const book = await this.service.create(body.title, body.isbn);
+        const author = await this.service.create(body.firstName, body.lastName);
 
-        response.status(201).json(book);
+        response.status(201).json(author);
     }
 
     async findAll(request: Request, response: Response) {
-        const books = await this.service.findAll();
+        const authors = await this.service.findAll();
 
-        response.json(books);
+        response.json(authors);
     }
 
     async findById(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
 
-        const book = await this.service.findById(id);
+        const author = await this.service.findById(id);
 
-        response.json(book);
+        response.json(author);
     }
 
     async update(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
         const body = request.body;
 
-        const updatedBook = await this.service.update(id, body.title, body.isbn);
+        const updatedAuthor = await this.service.update(id, body.firstName, body.lastName);
 
-        response.status(200).json(updatedBook);
+        response.status(200).json(updatedAuthor);
     }
 
     async delete(request: Request, response: Response) {
