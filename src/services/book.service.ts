@@ -1,6 +1,7 @@
 import { BookModel } from "../models/book.model";
 import Book from "../models/book.interface";
 import { ObjectId } from "mongoose";
+import HttpError from "../utils/httpError.error";
 
 export default class BookService {
     private model = BookModel;
@@ -15,7 +16,7 @@ export default class BookService {
             return book;
         } catch (error) {
             console.log(error);
-            throw new Error(`Book couldn't be created!`);
+            throw new HttpError(500, `Book couldn't be created!`);
         }
     }
 
@@ -26,7 +27,7 @@ export default class BookService {
             return books;
         } catch (error) {
             console.log(error);
-            throw new Error(`Books couldn't be read!`);
+            throw new HttpError(500, `Books couldn't be read!`);
         }
     }
 
@@ -37,7 +38,7 @@ export default class BookService {
             return book;
         } catch (error) {
             console.log(error);
-            throw new Error(`Book couldn't be searched!`);
+            throw new HttpError(500, `Book couldn't be searched!`);
         }
     }
 
@@ -56,7 +57,7 @@ export default class BookService {
             return book;
         } catch (error) {
             console.log(error);
-            throw new Error(`Book couldn't be searched!`);
+            throw new HttpError(500, `Book couldn't be searched!`);
         }
     }
 
@@ -65,7 +66,7 @@ export default class BookService {
             await this.model.deleteOne(id);
         } catch (error) {
             console.log(error);
-            throw new Error(`Book couldn't be searched!`);
+            throw new HttpError(500, `Book couldn't be searched!`);
         }
     }
 }

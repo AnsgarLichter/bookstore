@@ -6,72 +6,40 @@ export default class BookController {
     private service = new BookService();
 
     async create(request: Request, response: Response) {
-        try {
-            const body = request.body;
+        const body = request.body;
 
-            const book = await this.service.create(body.title, body.isbn);
+        const book = await this.service.create(body.title, body.isbn);
 
-            response.status(201).json(book);
-        } catch (error) {
-            response.status(500).json({
-                message: "Internal Server error!"
-            });
-        }
+        response.status(201).json(book);
     }
 
     async findAll(request: Request, response: Response) {
-        try {
-            const books = await this.service.findAll();
+        const books = await this.service.findAll();
 
-            response.json(books);
-        } catch (error) {
-            response.status(500).json({
-                message: "Internal Server error!"
-            });
-        }
+        response.json(books);
     }
 
     async findById(request: Request, response: Response) {
-        try {
-            const id = new Schema.Types.ObjectId(request.params.id);
+        const id = new Schema.Types.ObjectId(request.params.id);
 
-            const book = await this.service.findById(id);
+        const book = await this.service.findById(id);
 
-            response.json(book);
-        } catch (error) {
-            console.log(error);
-            response.status(500).json({
-                message: "Internal Server error!"
-            });
-        }
+        response.json(book);
     }
 
     async update(request: Request, response: Response) {
-        try {
-            const id = new Schema.Types.ObjectId(request.params.id);
-            const body = request.body;
+        const id = new Schema.Types.ObjectId(request.params.id);
+        const body = request.body;
 
-            const updatedBook = await this.service.update(id, body.title, body.isbn);
+        const updatedBook = await this.service.update(id, body.title, body.isbn);
 
-            response.status(200).json(updatedBook);
-        } catch (error) {
-            console.log(error);
-            response.status(500).json({
-                message: "Internal Server error!"
-            });
-        }
+        response.status(200).json(updatedBook);
     }
 
     async delete(request: Request, response: Response) {
-        try {
-            const id = new Schema.Types.ObjectId(request.params.id);
+        const id = new Schema.Types.ObjectId(request.params.id);
 
-            await this.service.delete(id);
-            response.status(200);
-        } catch (error) {
-            response.status(500).json({
-                message: "Internal Server error!"
-            });
-        }
+        await this.service.delete(id);
+        response.status(200);
     }
 }
