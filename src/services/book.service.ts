@@ -38,7 +38,7 @@ export default class BookService {
             return book;
         } catch (error) {
             console.log(error);
-            throw new HttpError(500, `Book couldn't be searched!`);
+            throw new HttpError(500, `Book couldn't be read!`);
         }
     }
 
@@ -57,7 +57,7 @@ export default class BookService {
             return book;
         } catch (error) {
             console.log(error);
-            throw new HttpError(500, `Book couldn't be searched!`);
+            throw new HttpError(500, `Book couldn't be updated!`);
         }
     }
 
@@ -66,7 +66,7 @@ export default class BookService {
             await this.model.deleteOne(id);
         } catch (error) {
             console.log(error);
-            throw new HttpError(500, `Book couldn't be searched!`);
+            throw new HttpError(500, `Book couldn't be deleted!`);
         }
     }
 }
