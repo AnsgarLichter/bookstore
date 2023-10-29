@@ -1,7 +1,7 @@
-import { ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 import { AuthorModel } from "../models/author.model";
-import Author from "../models/author.interface";
+import Author from "../interfaces/author.interface";
 
 export default class AuthorService {
     private model = AuthorModel;
