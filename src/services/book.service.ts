@@ -41,7 +41,7 @@ export default class BookService {
         }
     }
 
-    public async update(id: string, title: string, isbn: string): Promise<Book | null> {
+    public async update(id: ObjectId, title: string, isbn: string): Promise<Book | null> {
         try {
             const book = await this.model.findByIdAndUpdate(
                 id,

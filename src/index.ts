@@ -1,7 +1,7 @@
 import express, { Application } from "express";
-import Server from "./src/index";
+import App from "./app";
 
 const app: Application = express();
 const port: Number = Number.parseInt(process.env.PORT || "") | 3000;
 
-new Server(app, port);
+new App(app, port);

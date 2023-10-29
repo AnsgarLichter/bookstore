@@ -1,11 +1,11 @@
 import { Application } from "express";
 
 import homeRoutes from "./home.routes";
-import booksRoutes from "./books.routes";
+import bookRoutes from "./book.routes";
 
 export default class Routes {
   constructor(app: Application) {
     app.use("/api/v1/", homeRoutes);
-    app.use("/api/v1/books", booksRoutes);
+    app.use("/api/v1/books", bookRoutes);
   }
 }

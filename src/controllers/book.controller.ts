@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import BookService from "../services/book.service";
-import { ObjectId } from "mongoose";
+import { Schema } from "mongoose";
 
 export default class BookController {
     private service = new BookService();
@@ -33,7 +33,7 @@ export default class BookController {
 
     async findById(request: Request, response: Response) {
         try {
-            const id = request.params.id;
+            const id = new Schema.Types.ObjectId(request.params.id);
 
             const book = await this.service.findById(id);
 
@@ -48,7 +48,7 @@ export default class BookController {
 
     async update(request: Request, response: Response) {
         try {
-            const id = request.params.id;
+            const id = new Schema.Types.ObjectId(request.params.id);
             const body = request.body;
 
             const updatedBook = await this.service.update(id, body.title, body.isbn);
@@ -64,7 +64,7 @@ export default class BookController {
 
     async delete(request: Request, response: Response) {
         try {
-            const id = request.params.id as ObjectId;
+            const id = new Schema.Types.ObjectId(request.params.id);
 
             await this.service.delete(id);
             response.status(200);
