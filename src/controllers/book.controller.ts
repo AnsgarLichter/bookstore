@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import BookService from "../services/book.service";
 import { Types } from "mongoose";
+import bind from "bind-decorator";
 
 export default class BookController {
     private service = new BookService();
 
+    @bind
     async create(request: Request, response: Response) {
         const body = request.body;
 
@@ -13,12 +15,14 @@ export default class BookController {
         response.status(201).json(book);
     }
 
+    @bind
     async findAll(request: Request, response: Response) {
         const books = await this.service.findAll();
 
         response.json(books);
     }
 
+    @bind
     async findById(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
 
@@ -27,6 +31,7 @@ export default class BookController {
         response.json(book);
     }
 
+    @bind
     async update(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
         const body = request.body;
@@ -36,6 +41,7 @@ export default class BookController {
         response.status(200).json(updatedBook);
     }
 
+    @bind
     async delete(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
 

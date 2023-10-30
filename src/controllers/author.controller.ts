@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import AuthorService from "../services/author.service";
 import { Types } from "mongoose";
+import bind from "bind-decorator";
 
 export default class AuthorController {
     private service = new AuthorService();
 
+    @bind
     async create(request: Request, response: Response) {
         const body = request.body;
 
@@ -13,12 +15,14 @@ export default class AuthorController {
         response.status(201).json(author);
     }
 
+    @bind
     async findAll(request: Request, response: Response) {
         const authors = await this.service.findAll();
 
         response.json(authors);
     }
 
+    @bind
     async findById(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
 
@@ -27,6 +31,7 @@ export default class AuthorController {
         response.json(author);
     }
 
+    @bind
     async update(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
         const body = request.body;
@@ -36,6 +41,7 @@ export default class AuthorController {
         response.status(200).json(updatedAuthor);
     }
 
+    @bind
     async delete(request: Request, response: Response) {
         const id = new Types.ObjectId(request.params.id);
 

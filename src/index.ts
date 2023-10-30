@@ -1,3 +1,6 @@
+import { configDotenv } from "dotenv";
+configDotenv();
+
 import express, { Application } from "express";
 import App from "./app";
 
