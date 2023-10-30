@@ -10,7 +10,7 @@ export default class AuthorController {
     async create(request: Request, response: Response) {
         const body = request.body;
 
-        const author = await this.service.create(body.firstName, body.lastName);
+        const author = await this.service.create(body.firstName, body.familyName);
 
         response.status(201).json(author);
     }
