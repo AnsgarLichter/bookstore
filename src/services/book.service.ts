@@ -64,6 +64,17 @@ export default class BookService {
         }
     }
 
+    public async findByIds(ids: Types.ObjectId[] | undefined) {
+        try {
+            const books = await this.bookModel.find({ _id: { $in: ids } }).exec();
+
+            return books;
+        } catch (error) {
+            logger.error(error);
+            throw new HttpError(500, `Book couldn't be read!`);
+        }
+    }
+
     public async update(
         id: Types.ObjectId,
         title?: string,

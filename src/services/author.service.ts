@@ -3,15 +3,22 @@ import HttpError from "../utils/httpError.error";
 import { AuthorModel } from "../models/author.model";
 import Author from "../interfaces/author.interface";
 import logger from "../middleware/logger.middleware";
+import Book from "../interfaces/book.interface";
+import BookService from "./book.service";
 
 export default class AuthorService {
     private model = AuthorModel;
 
-    public async create(firstName: string, familyName: string): Promise<Author | null> {
+    private bookService = new BookService();
+
+    public async create(firstName: string, familyName: string, bookIds?: Types.ObjectId[]): Promise<Author | null> {
         try {
+            const books = await this.findBooksByIds(bookIds);
+
             const author = await this.model.create({
                 firstName: firstName,
-                familyName: familyName
+                familyName: familyName,
+                books: books
             });
 
             return author;
@@ -69,5 +76,21 @@ export default class AuthorService {
             logger.error(error);
             throw new HttpError(500, `Author couldn't be deleted!`);
         }
+    }
+
+    private async findBooksByIds(ids: Types.ObjectId[] | undefined): Promise<Book[] | null> {
+        if (!ids || ids.length === 0) {
+            return null;
+        }
+
+        const books = await this.bookService.findByIds(ids);
+        ids.forEach(id => {
+            if (!books?.find(book => book._id === id)) {
+                logger.error(`The book id ${id} is invalid!`);
+                throw new HttpError(400, `The book id ${id} is invalid!`);
+            }
+        });
+
+        return books;
     }
 }
