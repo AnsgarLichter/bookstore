@@ -9,8 +9,8 @@ export default class BookController {
     @bind
     async create(request: Request, response: Response) {
         const body = request.body;
-
-        const book = await this.service.create(body.title, body.isbn);
+        console.log(request.body);
+        const book = await this.service.create(body.title, body.isbn, body.author, body.genres);
 
         response.status(201).json(book);
     }
