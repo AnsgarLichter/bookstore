@@ -44,7 +44,7 @@ export default class GenreService {
 
     public async findByIds(ids: Types.ObjectId[]): Promise<Genre[] | null> {
         try {
-            const genres = await this.model.find({ _id: { $in: ids } }).exec();;
+            const genres = await this.model.find({ _id: { $in: ids } }).exec();
 
             return genres;
         } catch (error) {
