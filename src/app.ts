@@ -1,12 +1,13 @@
 import express, { Application } from "express";
 import cors from "cors";
-import morgan from 'morgan';
 import helmet from "helmet";
 import compression from 'compression';
 
 import Database from "./utils/database";
 import Routes from "./routes";
-import ErrorMiddleware from "./middleware/error.middleware";
+import errorMiddleware from "./middleware/error.middleware";
+import logger from "./middleware/logger.middleware";
+import morganMiddleware from "./middleware/morgan.middleware";
 
 const allowedOrigins = ['/http:\/\/localhost(:\d{1,5})?/'];
 
@@ -46,15 +47,15 @@ export default class App {
       origin: allowedOrigins
     }));
     this.app.use(helmet());
-    this.app.use(morgan('dev'));
+    this.app.use(morganMiddleware);
     this.app.use(compression());
-    
-    this.app.use(ErrorMiddleware);
+
+    this.app.use(errorMiddleware);
   }
 
   private startServer() {
     this.app.listen(this.port, () => {
-      console.log(`Server running at http://localhost:${this.port}`);
+      logger.info(`Server running at http://localhost:${this.port}`);
     });
   }
 }

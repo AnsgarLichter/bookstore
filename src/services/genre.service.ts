@@ -2,6 +2,7 @@ import { ObjectId, Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 import { GenreModel } from "../models/genre.model";
 import Genre from "../interfaces/genre.interface";
+import logger from "../middleware/logger.middleware";
 
 export default class GenreService {
     private model = GenreModel;
@@ -14,7 +15,7 @@ export default class GenreService {
 
             return genre;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Genre couldn't be created!`);
         }
     }
@@ -25,7 +26,7 @@ export default class GenreService {
 
             return genres;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Genres couldn't be read!`);
         }
     }
@@ -36,7 +37,7 @@ export default class GenreService {
 
             return genre;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Genre couldn't be read!`);
         }
     }
@@ -54,7 +55,7 @@ export default class GenreService {
 
             return genre;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Genre couldn't be updated!`);
         }
     }
@@ -63,7 +64,7 @@ export default class GenreService {
         try {
             await this.model.deleteOne(id);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Genre couldn't be deleted!`);
         }
     }

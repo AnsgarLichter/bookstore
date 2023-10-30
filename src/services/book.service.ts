@@ -2,6 +2,7 @@ import { BookModel } from "../models/book.model";
 import Book from "../interfaces/book.interface";
 import { ObjectId, Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
+import logger from "../middleware/logger.middleware";
 
 export default class BookService {
     private model = BookModel;
@@ -15,7 +16,7 @@ export default class BookService {
 
             return book;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Book couldn't be created!`);
         }
     }
@@ -26,7 +27,7 @@ export default class BookService {
 
             return books;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Books couldn't be read!`);
         }
     }
@@ -37,7 +38,7 @@ export default class BookService {
 
             return book;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Book couldn't be read!`);
         }
     }
@@ -56,7 +57,7 @@ export default class BookService {
 
             return book;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Book couldn't be updated!`);
         }
     }
@@ -65,7 +66,7 @@ export default class BookService {
         try {
             await this.model.deleteOne(id);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Book couldn't be deleted!`);
         }
     }

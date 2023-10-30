@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 import { AuthorModel } from "../models/author.model";
 import Author from "../interfaces/author.interface";
+import logger from "../middleware/logger.middleware";
 
 export default class AuthorService {
     private model = AuthorModel;
@@ -15,7 +16,7 @@ export default class AuthorService {
 
             return author;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Author couldn't be created!`);
         }
     }
@@ -26,7 +27,7 @@ export default class AuthorService {
 
             return authors;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Author couldn't be read!`);
         }
     }
@@ -37,7 +38,7 @@ export default class AuthorService {
 
             return author;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Author couldn't be read!`);
         }
     }
@@ -56,7 +57,7 @@ export default class AuthorService {
 
             return author;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Author couldn't be updated!`);
         }
     }
@@ -65,7 +66,7 @@ export default class AuthorService {
         try {
             await this.model.deleteOne(id);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new HttpError(500, `Author couldn't be deleted!`);
         }
     }

@@ -6,7 +6,7 @@ export default class Database {
     public static async connect() {
         try {
             await mongoose.connect(connectionUrl);
-            console.log("Successfully connected to MongoDB.");
+            logger.error("Successfully connected to MongoDB.");
         } catch (error) {
             console.error(`Connection to MongoDB failed: ${error}`);
             throw error;
