@@ -42,6 +42,17 @@ export default class GenreService {
         }
     }
 
+    public async findByIds(ids: Types.ObjectId[]): Promise<Genre[] | null> {
+        try {
+            const genres = await this.model.find({ _id: { $in: ids } }).exec();;
+
+            return genres;
+        } catch (error) {
+            logger.error(error);
+            throw new HttpError(500, `Genres couldn't be read!`);
+        }
+    }
+
     public async update(id: Types.ObjectId, name: string): Promise<Genre | null> {
         try {
             const genre = await this.model.findByIdAndUpdate(
