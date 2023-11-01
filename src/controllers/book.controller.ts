@@ -27,11 +27,14 @@ export default class BookController {
     }
 
     @bind
-    async findAll(request: Request, response: Response, next: NextFunction) {
+    async query(request: Request, response: Response, next: NextFunction) {
         try {
-            const books = await this.bookService.findAll();
+            const authorName: string | undefined = request.query.author?.toString();
+            if (authorName) {
+                return response.json(await this.bookService.findByAuthor(authorName));
+            }
 
-            response.json(books);
+            return response.json(await this.bookService.findAll());
         } catch (error) {
             next(error);
         }
@@ -88,8 +91,14 @@ export default class BookController {
             }
 
             await this.bookService.delete(id);
+            
             const author = await this.authorService.findById(book.author);
-            if (!author?.books?.length) {
+            if (!author) {
+                return response.status(200).send();
+            }
+
+            const booksOfAuthor = await this.bookService.findByAuthor(author.name);
+            if (booksOfAuthor && booksOfAuthor.length > 0) {
                 await this.authorService.delete(id);
             }
 

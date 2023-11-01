@@ -49,11 +49,13 @@ export default class BookService {
         }
     }
 
-    public async findByIds(ids: Types.ObjectId[] | undefined) {
+    public async findByAuthor(name: string): Promise<Book[] | null> {
         try {
-            const books = await this.bookModel.find({ _id: { $in: ids } }).exec();
-
-            return books;
+            const author = await this.authorModel.findOne({ name: name });
+            if (!author) {
+                return null;
+            }
+            return await this.bookModel.find({ author: author._id });
         } catch (error) {
             logger.error(error);
             throw new HttpError(500, `Book couldn't be read!`);

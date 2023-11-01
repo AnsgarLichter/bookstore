@@ -3,13 +3,15 @@ import HttpError from "../utils/httpError.error";
 import { AuthorModel } from "../models/author.model";
 import Author from "../interfaces/author.interface";
 import logger from "../middleware/logger.middleware";
+import { BookModel } from "../models/book.model";
 
 export default class AuthorService {
-    private model = AuthorModel;
+    private authorModel = AuthorModel;
+    private bookModel = BookModel;
 
     public async create(name: string): Promise<Author> {
         try {
-            const author = await this.model.create({
+            const author = await this.authorModel.create({
                 name: name
             });
 
@@ -22,7 +24,7 @@ export default class AuthorService {
 
     public async findAll(): Promise<Author[]> {
         try {
-            const authors = await this.model.find();
+            const authors = await this.authorModel.find();
 
             return authors;
         } catch (error) {
@@ -33,7 +35,7 @@ export default class AuthorService {
 
     public async findById(id: Types.ObjectId): Promise<Author | null> {
         try {
-            const author = await this.model.findById(id).populate("books");
+            const author = await this.authorModel.findById(id);
 
             return author;
         } catch (error) {
@@ -44,7 +46,7 @@ export default class AuthorService {
 
     public async findByName(name: string): Promise<Author | null> {
         try {
-            const author = await this.model.findOne({ name: name }).populate("books");
+            const author = await this.authorModel.findOne({ name: name });
 
             return author;
         } catch (error) {
@@ -55,7 +57,7 @@ export default class AuthorService {
 
     public async update(id: Types.ObjectId, name: string): Promise<Author | null> {
         try {
-            const author = await this.model.findByIdAndUpdate(
+            const author = await this.authorModel.findByIdAndUpdate(
                 id,
                 {
                     name: name
@@ -76,13 +78,21 @@ export default class AuthorService {
             const author = await this.findById(id);
             if (!author) {
                 return;
-            } else if (author.books && author.books.length > 0) {
-                logger.error(`There are still ${author?.books.length} books assigned. Therefore the author can't be deleted.`);
+            }
+
+            const booksOfAuthor = await this.bookModel.find({ author: author.id })
+                .populate('author');
+            if (booksOfAuthor && booksOfAuthor.length > 0) {
+                logger.error(`There are still ${booksOfAuthor?.length} books assigned. Therefore the author can't be deleted.`);
                 throw new HttpError(400, `Please delete all books of the author first!`);
             }
 
-            await this.model.deleteOne(id);
+            await this.authorModel.deleteOne(id);
         } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }
+
             logger.error(error);
             throw new HttpError(500, `Author couldn't be deleted!`);
         }

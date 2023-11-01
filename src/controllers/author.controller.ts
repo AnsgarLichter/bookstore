@@ -2,16 +2,17 @@ import { NextFunction, Request, Response } from "express";
 import AuthorService from "../services/author.service";
 import { Types } from "mongoose";
 import bind from "bind-decorator";
+import BookService from "../services/book.service";
 
 export default class AuthorController {
-    private service = new AuthorService();
+    private authorService = new AuthorService();
 
     @bind
     async create(request: Request, response: Response, next: NextFunction) {
         try {
             const body = request.body;
 
-            const author = await this.service.create(body.name);
+            const author = await this.authorService.create(body.name);
 
             response.status(201).json(author);
         } catch (error) {
@@ -22,7 +23,7 @@ export default class AuthorController {
     @bind
     async findAll(request: Request, response: Response, next: NextFunction) {
         try {
-            const authors = await this.service.findAll();
+            const authors = await this.authorService.findAll();
 
             response.json(authors);
         } catch (error) {
@@ -35,7 +36,7 @@ export default class AuthorController {
         try {
             const id = new Types.ObjectId(request.params.id);
 
-            const author = await this.service.findById(id);
+            const author = await this.authorService.findById(id);
 
             response.json(author);
         } catch (error) {
@@ -49,7 +50,7 @@ export default class AuthorController {
             const id = new Types.ObjectId(request.params.id);
             const body = request.body;
 
-            const updatedAuthor = await this.service.update(id, body.name);
+            const updatedAuthor = await this.authorService.update(id, body.name);
 
             response.status(200).json(updatedAuthor);
         } catch (error) {
@@ -62,8 +63,8 @@ export default class AuthorController {
         try {
             const id = new Types.ObjectId(request.params.id);
 
-            await this.service.delete(id);
-            response.status(200);
+            await this.authorService.delete(id);
+            response.status(200).send();
         } catch (error) {
             next(error);
         }

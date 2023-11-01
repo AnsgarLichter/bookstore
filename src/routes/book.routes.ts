@@ -14,7 +14,7 @@ class BookRoutes {
   intializeRoutes() {
     this.router.post("/", validationMiddleware(bookValidation.create), this.controller.create);
 
-    this.router.get("/", this.controller.findAll);
+    this.router.get("/", this.controller.query);
     this.router.get("/:id", this.controller.findById);
     this.router.get("/:id/author", this.controller.findByIdAndReturnAuthor);
 
