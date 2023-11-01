@@ -5,6 +5,7 @@ import bind from "bind-decorator";
 import AuthorService from "../services/author.service";
 import Author from "../interfaces/author.interface";
 import HttpError from "../utils/httpError.error";
+import logger from "../middleware/logger.middleware";
 
 export default class BookController {
     private bookService = new BookService();
@@ -67,9 +68,6 @@ export default class BookController {
         try {
             const id = new Types.ObjectId(request.params.id);
             const body = request.body;
-            if (!body) {
-                throw new HttpError(400, `Please provide the properties to update!`);
-            }
 
             const updatedBook = await this.bookService.update(id, body.title, body.isbn, body.author);
 

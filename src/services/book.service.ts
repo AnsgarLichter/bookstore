@@ -86,8 +86,7 @@ export default class BookService {
                 {
                     returnDocument: 'after'
                 })
-                .populate("author")
-                .populate("genres");
+                .populate("author");
 
             return book;
         } catch (error) {
