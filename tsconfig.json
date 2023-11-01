@@ -23,7 +23,7 @@
       "bun-types"
     ],
     "experimentalDecorators": true,
-    // "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": false
   },
   "include": [
     "src/**/*.ts"
