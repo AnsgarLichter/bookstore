@@ -11,12 +11,12 @@ const errorMiddleware = (
 ): void => {
     const statusCode = error.statusCode || 500;
     const message = error.message || "An error occurred!";
-    
-    logger.info(`Caught http error with statusCode ${statusCode} and message ${message}.`);
+
+    logger.error(`Caught http error with statusCode ${statusCode} and message ${message}.`);
+    logger.error(error.stack);
     response.status(statusCode).json({
         message: message
     });
-    logger.info(`Applied error properties to the response!`);
 }
 
 export default errorMiddleware;

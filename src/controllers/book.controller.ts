@@ -1,51 +1,103 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import BookService from "../services/book.service";
 import { Types } from "mongoose";
 import bind from "bind-decorator";
+import AuthorService from "../services/author.service";
+import Author from "../interfaces/author.interface";
+import HttpError from "../utils/httpError.error";
 
 export default class BookController {
-    private service = new BookService();
+    private bookService = new BookService();
+    private authorService = new AuthorService();
 
     @bind
-    async create(request: Request, response: Response) {
-        const body = request.body;
-        console.log(request.body);
-        const book = await this.service.create(body.title, body.isbn, body.author, body.genres);
+    async create(request: Request, response: Response, next: NextFunction) {
+        try {
+            const body = request.body;
+            const author: Author = body.author;
 
-        response.status(201).json(book);
+            const validAuthor: Author = await this.authorService.findByName(author.name) || await this.authorService.create(author.name);
+            const book = await this.bookService.create(body.title, body.isbn, validAuthor);
+
+            response.status(201).json(book);
+        } catch (error) {
+            next(error);
+        }
     }
 
     @bind
-    async findAll(request: Request, response: Response) {
-        const books = await this.service.findAll();
+    async findAll(request: Request, response: Response, next: NextFunction) {
+        try {
+            const books = await this.bookService.findAll();
 
-        response.json(books);
+            response.json(books);
+        } catch (error) {
+            next(error);
+        }
     }
 
     @bind
-    async findById(request: Request, response: Response) {
-        const id = new Types.ObjectId(request.params.id);
+    async findById(request: Request, response: Response, next: NextFunction) {
+        try {
+            const id = new Types.ObjectId(request.params.id);
 
-        const book = await this.service.findById(id);
+            const book = await this.bookService.findById(id);
 
-        response.json(book);
+            response.json(book);
+        } catch (error) {
+            next(error);
+        }
     }
 
     @bind
-    async update(request: Request, response: Response) {
-        const id = new Types.ObjectId(request.params.id);
-        const body = request.body;
+    async findByIdAndReturnAuthor(request: Request, response: Response, next: NextFunction) {
+        try {
+            const id = new Types.ObjectId(request.params.id);
 
-        const updatedBook = await this.service.update(id, body.title, body.isbn);
+            const book = await this.bookService.findById(id);
 
-        response.status(200).json(updatedBook);
+            response.json(book?.author);
+        } catch (error) {
+            next(error);
+        }
     }
 
     @bind
-    async delete(request: Request, response: Response) {
-        const id = new Types.ObjectId(request.params.id);
+    async update(request: Request, response: Response, next: NextFunction) {
+        try {
+            const id = new Types.ObjectId(request.params.id);
+            const body = request.body;
+            if (!body) {
+                throw new HttpError(400, `Please provide the properties to update!`);
+            }
 
-        await this.service.delete(id);
-        response.status(200);
+            const updatedBook = await this.bookService.update(id, body.title, body.isbn, body.author);
+
+            response.status(200).json(updatedBook);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    @bind
+    async delete(request: Request, response: Response, next: NextFunction) {
+        try {
+            const id = new Types.ObjectId(request.params.id);
+
+            const book = await this.bookService.findById(id);
+            if (!book) {
+                return response.status(200).send();
+            }
+
+            await this.bookService.delete(id);
+            const author = await this.authorService.findById(book.author);
+            if (!author?.books?.length) {
+                await this.authorService.delete(id);
+            }
+
+            response.status(200).send();
+        } catch (error) {
+            next(error);
+        }
     }
 }

@@ -3,32 +3,19 @@ import Book from "../interfaces/book.interface";
 import { Types } from "mongoose";
 import HttpError from "../utils/httpError.error";
 import logger from "../middleware/logger.middleware";
-import AuthorService from "./author.service";
-import GenreService from "./genre.service";
-import Genre from "../interfaces/genre.interface";
 import Author from "../interfaces/author.interface";
+import { AuthorModel } from "../models/author.model";
 
 export default class BookService {
     private bookModel = BookModel;
+    private authorModel = AuthorModel;
 
-    private authorService = new AuthorService();
-    private genreService = new GenreService();
-
-    public async create(title: string, isbn: string, authorId: Types.ObjectId, genreIds: Types.ObjectId[]): Promise<Book | null> {
-        if (!authorId.toString().trim() || genreIds.length === 0) {
-            logger.error(`To create a book an author and at least 1 genre must be supplied.`);
-            throw new HttpError(400, `To create a book an author and at least 1 genre must be supplied.`);
-        }
-
-        const author = this.findAuthorById(authorId);
-        const genres = this.findGenresByIds(genreIds);
-
+    public async create(title: string, isbn: string, author: Author): Promise<Book> {
         try {
             const book = await this.bookModel.create({
                 title: title,
                 isbn: isbn,
-                author: author,
-                genres: genres
+                author: author
             });
 
             return book;
@@ -41,8 +28,7 @@ export default class BookService {
     public async findAll(): Promise<Book[]> {
         try {
             const books = await this.bookModel.find()
-                .populate("author")
-                .populate("genres");;
+                .populate("author");
 
             return books;
         } catch (error) {
@@ -54,8 +40,7 @@ export default class BookService {
     public async findById(id: Types.ObjectId): Promise<Book | null> {
         try {
             const book = await this.bookModel.findById(id)
-                .populate("author")
-                .populate("genres");
+                .populate("author");
 
             return book;
         } catch (error) {
@@ -79,15 +64,13 @@ export default class BookService {
         id: Types.ObjectId,
         title?: string,
         isbn?: string,
-        authorId?: Types.ObjectId,
-        genreIds?: Types.ObjectId[]
+        author?: Author
     ): Promise<Book | null> {
         try {
             const propertiesToUpdate = await this.parseProperties(
                 title,
                 isbn,
-                authorId,
-                genreIds
+                author
             );
             if (Object.keys(propertiesToUpdate).length === 0) {
                 logger.warn(`No properties supplied to update. Therefore no update is triggered!`);
@@ -122,35 +105,10 @@ export default class BookService {
         }
     }
 
-    private async findAuthorById(id: Types.ObjectId): Promise<Author | null> {
-        const author = await this.authorService.findById(id);
-        if (!author) {
-            logger.error(`No author found for the ID ${id}. An author is required to create a book.`);
-            throw new HttpError(400, `An author is required to create a book. The author ${id} is invalid!`);
-        }
-
-        return author;
-    }
-
-    private async findGenresByIds(ids: Types.ObjectId[]): Promise<Genre[] | null> {
-        const validGenres = await this.genreService.findByIds(ids);
-        if (validGenres?.length !== ids.length) {
-            ids.forEach(id => {
-                if (!validGenres?.find(validGenre => validGenre._id == id)) {
-                    logger.error(`The genre ${id} is invalid!`);
-                    throw new HttpError(400, `Please supply only valid genres. The genre ${id} is invalid!`);
-                }
-            });
-        }
-
-        return validGenres;
-    }
-
     private async parseProperties(
         title?: string,
         isbn?: string,
-        authorId?: Types.ObjectId,
-        genreIds?: Types.ObjectId[]
+        author?: Author
     ): Promise<Object> {
         const propertiesToUpdate: { [key: string]: any } = {}
 
@@ -162,14 +120,8 @@ export default class BookService {
             propertiesToUpdate[`isbn`] = isbn;
         }
 
-        if (authorId) {
-            const author = await this.findAuthorById(authorId);
+        if (author) {
             propertiesToUpdate[`author`] = author;
-        }
-
-        if (genreIds && genreIds.length > 0) {
-            const genres = await this.findGenresByIds(genreIds);
-            propertiesToUpdate[`genres`] = genres;
         }
 
         return propertiesToUpdate;

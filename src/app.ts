@@ -27,6 +27,8 @@ export default class App {
 
     this.initializeMiddleware();
     this.initializeRoutes();
+    // Must be initialized after the routes. Therefore it can't be inlcuded in the other method.
+    this.initializeErrorMiddleware();
     this.startServer();
   }
 
@@ -49,7 +51,9 @@ export default class App {
     this.app.use(helmet());
     this.app.use(morganMiddleware);
     this.app.use(compression());
+  }
 
+  private initializeErrorMiddleware() {
     this.app.use(errorMiddleware);
   }
 
