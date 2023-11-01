@@ -12,11 +12,11 @@ class AuthorRoutes {
   }
 
   intializeRoutes() {
-    this.router.post("/", validationMiddleware(authorValidation.author), this.controller.create);
-    this.router.get("/", this.controller.findAll);
-    this.router.get("/:id", this.controller.findById);
-    this.router.put("/:id", validationMiddleware(authorValidation.author), this.controller.update);
-    this.router.delete("/:id", this.controller.delete);
+    this.router.post("/", validationMiddleware(authorValidation.author), this.controller.create.bind(this.controller));
+    this.router.get("/", this.controller.findAll.bind(this.controller));
+    this.router.get("/:id", this.controller.findById.bind(this.controller));
+    this.router.put("/:id", validationMiddleware(authorValidation.author), this.controller.update.bind(this.controller));
+    this.router.delete("/:id", this.controller.delete.bind(this.controller));
   }
 }
 

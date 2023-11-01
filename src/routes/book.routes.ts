@@ -12,15 +12,15 @@ class BookRoutes {
   }
 
   intializeRoutes() {
-    this.router.post("/", validationMiddleware(bookValidation.create), this.controller.create);
+    this.router.post("/", validationMiddleware(bookValidation.create), this.controller.create.bind(this.controller));
 
-    this.router.get("/", this.controller.query);
-    this.router.get("/:id", this.controller.findById);
-    this.router.get("/:id/author", this.controller.findByIdAndReturnAuthor);
+    this.router.get("/", this.controller.query.bind(this.controller));
+    this.router.get("/:id", this.controller.findById.bind(this.controller));
+    this.router.get("/:id/author", this.controller.findByIdAndReturnAuthor.bind(this.controller));
 
-    this.router.put("/:id", validationMiddleware(bookValidation.update), this.controller.update);
+    this.router.put("/:id", validationMiddleware(bookValidation.update), this.controller.update.bind(this.controller));
     
-    this.router.delete("/:id", this.controller.delete);
+    this.router.delete("/:id", this.controller.delete.bind(this.controller));
   }
 }
 

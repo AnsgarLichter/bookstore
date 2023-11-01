@@ -7,7 +7,6 @@ import BookService from "../services/book.service";
 export default class AuthorController {
     private authorService = new AuthorService();
 
-    @bind
     async create(request: Request, response: Response, next: NextFunction) {
         try {
             const body = request.body;
@@ -20,7 +19,6 @@ export default class AuthorController {
         }
     }
 
-    @bind
     async findAll(request: Request, response: Response, next: NextFunction) {
         try {
             const authors = await this.authorService.findAll();
@@ -31,7 +29,6 @@ export default class AuthorController {
         }
     }
 
-    @bind
     async findById(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);
@@ -44,7 +41,6 @@ export default class AuthorController {
         }
     }
 
-    @bind
     async update(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);
@@ -58,7 +54,6 @@ export default class AuthorController {
         }
     }
 
-    @bind
     async delete(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);

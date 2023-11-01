@@ -11,7 +11,6 @@ export default class BookController {
     private bookService = new BookService();
     private authorService = new AuthorService();
 
-    @bind
     async create(request: Request, response: Response, next: NextFunction) {
         try {
             const body = request.body;
@@ -26,7 +25,6 @@ export default class BookController {
         }
     }
 
-    @bind
     async query(request: Request, response: Response, next: NextFunction) {
         try {
             const authorName: string | undefined = request.query.author?.toString();
@@ -40,7 +38,6 @@ export default class BookController {
         }
     }
 
-    @bind
     async findById(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);
@@ -53,7 +50,6 @@ export default class BookController {
         }
     }
 
-    @bind
     async findByIdAndReturnAuthor(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);
@@ -66,7 +62,6 @@ export default class BookController {
         }
     }
 
-    @bind
     async update(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);
@@ -80,7 +75,6 @@ export default class BookController {
         }
     }
 
-    @bind
     async delete(request: Request, response: Response, next: NextFunction) {
         try {
             const id = new Types.ObjectId(request.params.id);

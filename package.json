@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "prod": "bun build src/index.ts --outdir ./dist --target bun && bun run ./dist index.js"
   },
   "repository": {
     "type": "git",

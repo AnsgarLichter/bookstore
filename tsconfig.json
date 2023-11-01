@@ -22,7 +22,7 @@
     "types": [
       "bun-types"
     ],
-    "experimentalDecorators": true,
+    "experimentalDecorators": false,
     "emitDecoratorMetadata": false
   },
   "include": [
