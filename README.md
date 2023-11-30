@@ -7,15 +7,15 @@ You will find the Node.js version in the [main](https://github.com/AnsgarLichter
 
 This API includes the following features:
 
-| Feature                   | Info               |
-|---------------------------|--------------------|
-| ORM Integration           | Mongoose           |
-| Logging                   | Winston            |
-| Logging der HTTP-Requests | Morgan             |
-| Validations               | Joi                |
-| HTTP-Header setzen        | Helmet             |
-| Response Compression      | Compression        |
-| Error Handling            | Own Error Handler  |
+| Feature                                    | Info               |
+|--------------------------------------------|--------------------|
+| ORM Integration                            | Mongoose           |
+| Logging                                    | Winston            |
+| Logging der HTTP-Requests                  | Morgan             |
+| Validations                                | Joi                |
+| Secure application by setting HTTP-Headers | Helmet             |
+| Response Compression                       | Compression        |
+| Error Handling                             | Own Error Handler  |
 
 ## Installation
 
