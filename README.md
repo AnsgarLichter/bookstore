@@ -11,7 +11,7 @@ This API includes the following features:
 |--------------------------------------------|--------------------|
 | ORM Integration                            | Mongoose           |
 | Logging                                    | Winston            |
-| Logging der HTTP-Requests                  | Morgan             |
+| Logging of the HTTP-Requests               | Morgan             |
 | Validations                                | Joi                |
 | Secure application by setting HTTP-Headers | Helmet             |
 | Response Compression                       | Compression        |
